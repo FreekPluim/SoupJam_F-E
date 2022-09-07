@@ -24,16 +24,22 @@ public class DroneController : MonoBehaviour
     //external components
     Rigidbody rb;
 
+    //Animation shit
+    [SerializeField] Animator animator;
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
+
 
     //---------read inputs-----------
     public void SetHorMoveDir(Vector2 dir)
     {
         if (dir.magnitude > 1f) { dir.Normalize(); } //force dir in expected bounds
         horMoveDir = dir;
+        HandleSpriteFlip(dir);
     }
 
     public void SetVerMoveDir(float dir)
@@ -53,6 +59,12 @@ public class DroneController : MonoBehaviour
         //ver movement
         UpdateVerSpeed();
         MoveVer();
+
+
+        if(horMoveDir != Vector2.zero) {
+            animator.SetBool("Walking", true);
+        } else animator.SetBool("Walking", false);
+
     }
 
     //---------------horizontal movement----------------
@@ -85,5 +97,13 @@ public class DroneController : MonoBehaviour
         if (Mathf.Abs(verMoveDir) > 0.1f) { toMove *= verMoveDir; } //don't allow stop through moveDir
         else { toMove *= Mathf.Clamp(rb.velocity.y, -1f, 1f); } //use old direction when there is no direct moveDir
         rb.velocity = new Vector3(rb.velocity.x, toMove, rb.velocity.z);
+    }
+
+    void HandleSpriteFlip(Vector2 Move)
+    {
+        if(Move.x < 0 || Move.y < 0 && Move.x <= 0)
+            spriteRenderer.flipX = true;
+        else
+            spriteRenderer.flipX = false;
     }
 }

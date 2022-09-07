@@ -28,9 +28,9 @@ public class WaveSpawnerBehaviour : MonoBehaviour
         yield return new WaitForSeconds(10);
         spendAmountMax = spendAmountMax + 3;
         spendAmount = spendAmountMax;
-
-        if (availableEnemies.Count == 0)
-            StartCoroutine(SpawnEnemy());
+        StartCoroutine(AddMoney());
+        StartCoroutine(SpawnEnemy());
+            
     }
 
     IEnumerator SpawnEnemy()
@@ -40,13 +40,17 @@ public class WaveSpawnerBehaviour : MonoBehaviour
         //Get random enemy
         newEnemy.GetComponent<EnemyBehaviour>().SO = selectRandomEnemy();
 
-        //Get random spawnlocation
-        Vector3 spawnPos = Random.insideUnitSphere;
-        spawnPos.y = 0;
+        if (newEnemy.GetComponent<EnemyBehaviour>().SO != null)
+        {
+            //Get random spawnlocation
+            Vector2 randomUnit = Random.insideUnitCircle;
+            randomUnit.Normalize();
+            Vector3 spawnPos = new Vector3(randomUnit.x, 0.1f, randomUnit.y);
+            //Debug.Log(spawnPos);
 
-        //Spawn Enemy
-        Instantiate(newEnemy, spawnPos * Random.Range(spawnRadiusMin, spendAmountMax), Quaternion.identity);
-        yield return new WaitForSeconds(timeBetweenSpawn);
+            Instantiate(newEnemy, spawnPos * Random.Range(spawnRadiusMin, spendAmountMax), Quaternion.identity);
+            yield return new WaitForSeconds(timeBetweenSpawn);
+        }
 
         //Check if there are still enemies that can spawn;
         if(availableEnemies.Count > 0)
@@ -67,9 +71,13 @@ public class WaveSpawnerBehaviour : MonoBehaviour
             }
         }
 
-        Enemy randomEnemy = availableEnemies[Random.Range(0, availableEnemies.Count)];
-        spendAmount = spendAmount - availableEnemies[Random.Range(0, availableEnemies.Count)].Cost;
-        return randomEnemy;
+        if (availableEnemies.Count > 0)
+        {
+            Enemy randomEnemy = availableEnemies[Random.Range(0, availableEnemies.Count)];
+            spendAmount = spendAmount - availableEnemies[Random.Range(0, availableEnemies.Count)].Cost;
+            return randomEnemy;
+        }
+        return null;
     }
 
     private void OnDrawGizmos()

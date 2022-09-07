@@ -8,4 +8,5 @@ public class Enemy : ScriptableObject
     public Sprite sprite;
     public int Health;
     public int Cost;
+    public int rageGain;
 }

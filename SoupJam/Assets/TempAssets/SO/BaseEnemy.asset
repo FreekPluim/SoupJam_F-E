@@ -15,3 +15,4 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 9c31bf217fd68c14196e3a0478c1d668, type: 3}
   Health: 5
   Cost: 2
+  rageGain: 2

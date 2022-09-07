@@ -5,7 +5,7 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private Vector3 moveSpeed;
+    [SerializeField] public Vector3 moveSpeed;
     [SerializeField] private bool moveOnStart = true;
 
     //states
