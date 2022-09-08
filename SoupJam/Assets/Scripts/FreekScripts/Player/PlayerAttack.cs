@@ -9,6 +9,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] GameObject fireballPrefab;
     [SerializeField] LayerMask aimable;
 
+    [SerializeField] Transform leftSpawn, rightSpawn;
+
     Vector3 hitPos;
 
     [SerializeField] Animator animator;
@@ -29,12 +31,20 @@ public class PlayerAttack : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, aimable))
             {
                 StartCoroutine(Animation(hit.point.x));
-                Vector3 direction = (hit.point - transform.position).normalized;
-                Debug.DrawRay(transform.position, direction, Color.green, Mathf.Infinity);
+                Vector3 direction;
+                GameObject newFireball;
+                if (hitPos.x < transform.position.x)
+                {
+                    direction = (hit.point - leftSpawn.position).normalized;
+                    newFireball = Instantiate(fireballPrefab, leftSpawn.position, Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z));
+                }
+                else
+                {
+                    direction = (hit.point - rightSpawn.position).normalized;
+                    newFireball = Instantiate(fireballPrefab, rightSpawn.position, transform.rotation);
+                }
 
-                hitPos = hit.point;
-
-                GameObject newFireball = Instantiate(fireballPrefab, transform.position, transform.rotation);
+                //newFireball.transform.LookAt(new Vector3(hitPos.x, newFireball.transform.position.y, hitPos.z));
                 newFireball.GetComponent<Mover>().moveSpeed = new Vector3(direction.x, 0.1f, direction.z) * attackSpeed;
             }
         }

@@ -5,7 +5,9 @@ using UnityEngine;
 public class WaveSpawnerBehaviour : MonoBehaviour
 {
     List<Enemy> availableEnemies = new List<Enemy>();
-    
+
+    [SerializeField] Enemy lowestCostEnemy, middelCostEnemy;
+
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] List<Enemy> enemies = new List<Enemy>();
 
@@ -28,6 +30,21 @@ public class WaveSpawnerBehaviour : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenCostReplenishment);
         spendAmountMax = spendAmountMax + 3;
+
+
+        PlayerData.instance.rageBarTimer = PlayerData.instance.rageBarTimer - 0.02f;
+        PlayerData.instance.rageBarDecrease = PlayerData.instance.rageBarDecrease + 0.05f;
+
+
+        if(spendAmountMax > 30 && enemies.Contains(lowestCostEnemy))
+        {
+            enemies.Remove(lowestCostEnemy);
+        }
+        if(spendAmountMax > 45 && enemies.Contains(middelCostEnemy))
+        {
+            enemies.Remove(middelCostEnemy);
+        }
+
         spendAmount = spendAmountMax;
         StartCoroutine(AddMoney());
         StartCoroutine(SpawnEnemy());
