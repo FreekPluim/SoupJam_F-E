@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WaveSpawnerBehaviour : MonoBehaviour
 {
+    List<Enemy> availableEnemies = new List<Enemy>();
+    
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] List<Enemy> enemies = new List<Enemy>();
-    List<Enemy> availableEnemies = new List<Enemy>();
-
 
     [SerializeField] float spawnRadiusMin = 14;
     [SerializeField] float spawnRadiusMax = 16;
@@ -15,7 +15,6 @@ public class WaveSpawnerBehaviour : MonoBehaviour
 
     [SerializeField] int spendAmount;
     [SerializeField] int spendAmountMax;
-
     [SerializeField] int timeBetweenCostReplenishment;
 
     private void Start()
@@ -45,12 +44,12 @@ public class WaveSpawnerBehaviour : MonoBehaviour
         if (newEnemy.GetComponent<EnemyBehaviour>().SO != null)
         {
             //Get random spawnlocation
-            Vector2 randomUnit = Random.insideUnitCircle;
-            randomUnit.Normalize();
-            Vector3 spawnPos = new Vector3(randomUnit.x, 0.1f, randomUnit.y);
+            Vector2 randomDirection = Random.insideUnitCircle;
+            randomDirection.Normalize();
+            Vector3 spawnPos = new Vector3(randomDirection.x, 0.1f, randomDirection.y);
             //Debug.Log(spawnPos);
 
-            Instantiate(newEnemy, (spawnPos * Random.Range(spawnRadiusMin, spendAmountMax)) + transform.position, Quaternion.identity);
+            Instantiate(newEnemy, (spawnPos * Random.Range(spawnRadiusMin, spawnRadiusMax)) + transform.position, Quaternion.identity);
             yield return new WaitForSeconds(timeBetweenSpawn);
         }
 
