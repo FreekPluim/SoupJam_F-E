@@ -9,8 +9,8 @@ public class PlayerData : MonoBehaviour
     [SerializeField] HealthManager RageBar;
 
     [Header("Rage Bar Variables")]
-    public int rageBarTimer;
-    [SerializeField] int rageBarDecrease;
+    public float rageBarTimer;
+    public float rageBarDecrease;
 
     private void Start()
     {
