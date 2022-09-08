@@ -17,16 +17,18 @@ public class PlayerAttack : MonoBehaviour
     bool canAttack = true;
     [SerializeField] float attackSpeed;
 
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     public void Attack()
     {
         if (canAttack)
         {
-            StartCoroutine(Animation());
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, aimable))
             {
+                StartCoroutine(Animation(hit.point.x));
                 Vector3 direction = (hit.point - transform.position).normalized;
                 Debug.DrawRay(transform.position, direction, Color.green, Mathf.Infinity);
 
@@ -38,11 +40,18 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    IEnumerator Animation()
+    IEnumerator Animation(float hitPointX)
     {
         canAttack = false;
         animator.SetBool("Attack", true);
+        Debug.Log("MouseHit: " + hitPointX + " PlayerX: " + transform.position.x);
+        if (hitPointX < transform.position.x)
+        {
+            spriteRenderer.flipX = true;
+        } else spriteRenderer.flipX = false;
+
         yield return new WaitForSeconds(AttackTimer);
+
         animator.SetBool("Attack", false);
         canAttack = true;
     }

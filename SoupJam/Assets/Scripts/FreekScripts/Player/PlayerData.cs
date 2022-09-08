@@ -6,10 +6,10 @@ public class PlayerData : MonoBehaviour
 {
     public static PlayerData instance;
 
-    [SerializeField] HealthManager HealthBar, RageBar;
+    [SerializeField] HealthManager RageBar;
 
     [Header("Rage Bar Variables")]
-    [SerializeField] int rageBarTimer;
+    public int rageBarTimer;
     [SerializeField] int rageBarDecrease;
 
     private void Start()

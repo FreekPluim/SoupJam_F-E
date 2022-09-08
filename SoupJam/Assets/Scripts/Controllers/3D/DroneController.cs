@@ -101,9 +101,9 @@ public class DroneController : MonoBehaviour
 
     void HandleSpriteFlip(Vector2 Move)
     {
-        if(Move.x < 0 || Move.y < 0 && Move.x <= 0)
+        if(Move.x < 0)
             spriteRenderer.flipX = true;
-        else
+        else if(Move.x > 0)
             spriteRenderer.flipX = false;
     }
 }

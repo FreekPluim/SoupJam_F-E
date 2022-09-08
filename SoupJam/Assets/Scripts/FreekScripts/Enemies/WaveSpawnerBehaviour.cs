@@ -16,6 +16,8 @@ public class WaveSpawnerBehaviour : MonoBehaviour
     [SerializeField] int spendAmount;
     [SerializeField] int spendAmountMax;
 
+    [SerializeField] int timeBetweenCostReplenishment;
+
     private void Start()
     {
         spendAmount = spendAmountMax;
@@ -25,7 +27,7 @@ public class WaveSpawnerBehaviour : MonoBehaviour
 
     IEnumerator AddMoney()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(timeBetweenCostReplenishment);
         spendAmountMax = spendAmountMax + 3;
         spendAmount = spendAmountMax;
         StartCoroutine(AddMoney());
@@ -48,7 +50,7 @@ public class WaveSpawnerBehaviour : MonoBehaviour
             Vector3 spawnPos = new Vector3(randomUnit.x, 0.1f, randomUnit.y);
             //Debug.Log(spawnPos);
 
-            Instantiate(newEnemy, spawnPos * Random.Range(spawnRadiusMin, spendAmountMax), Quaternion.identity);
+            Instantiate(newEnemy, (spawnPos * Random.Range(spawnRadiusMin, spendAmountMax)) + transform.position, Quaternion.identity);
             yield return new WaitForSeconds(timeBetweenSpawn);
         }
 
